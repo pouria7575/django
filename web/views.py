@@ -41,6 +41,10 @@ def grecaptcha_verify(request):
     verify_rs = verify_rs.json()
     return verify_rs.get("success", False)
 
+def index(request):
+    context={}
+    return render(request, 'index.html', context)
+
 
 random_str = lambda N: ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.ascii_lowercase + string.digits) for _ in range(N))
 
@@ -70,7 +74,7 @@ def register(request):
                 msg['From'] = fromaddr
                 msg['To'] = toaddr
                 msg['Subject'] = "فعال سازی بستون"
-                body = "for activate your beston account please click : http://bestoon.ir/accounts/register/?email={}&code={}".format(email, code)
+                body = "for activate your beston account please click : {}?email={}&code={}".format(request.build_absolute_uri('/accounts/register/'),email, code)
                 msg.attach(MIMEText(body, 'plain'))
                 server = smtplib.SMTP('smtp.gmail.com', 587)
                 server.starttls()
